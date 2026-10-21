@@ -70,6 +70,7 @@
     fPage: 'Page', privacy: 'Privacy policy',
     legal: '© 2026 Antonis Paximadakis, psychologist. Confidentiality and data protection under the GDPR.',
     photos: 'Images, printed in one ink:',
+    homeL: 'Inner Balance, back to top', menuL: 'Menu',
     prevL: 'Previous testimonial', nextL: 'Next testimonial', voicesL: 'Testimonials', dragHint: 'Drag for the next one',
     glanceH: 'At a glance',
     glanceP: 'Everything worth knowing before the first meeting. Pick them up, toss them around; they always find their balance in the end.',
@@ -341,6 +342,58 @@
     setTimeout(() => { submitBtn.textContent = en ? EN.submit : 'Ετοιμάστε το email'; }, 4000);
   });
   $$('input, select, textarea', coupon).forEach(el => el.addEventListener('input', () => el.removeAttribute('aria-invalid')));
+
+  /* ---------- Wordmark: back to the top ---------- */
+  $('.wordmark').addEventListener('click', e => {
+    e.preventDefault();
+    closeMenu(false);
+    scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    history.replaceState(null, '', location.pathname + location.search);
+  });
+
+  /* ---------- Mobile menu ---------- */
+  const root = document.documentElement;
+  const menu = $('#menu');
+  const menuBtn = $('.menu-btn');
+  const setBarH = () => root.style.setProperty('--bar-h', `${bar.offsetHeight}px`);
+  function openMenu() {
+    setBarH();
+    root.classList.add('menu-open');
+    menu.inert = false;
+    menuBtn.setAttribute('aria-expanded', 'true');
+    menuBtn.setAttribute('aria-label', lang === 'en' ? 'Close menu' : 'Κλείσιμο μενού');
+    setTimeout(() => { const first = $('a', menu); if (first) first.focus({ preventScroll: true }); }, reduce ? 0 : 300);
+  }
+  function closeMenu(returnFocus = true) {
+    if (!root.classList.contains('menu-open')) return;
+    root.classList.remove('menu-open');
+    menu.inert = true;
+    menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtn.setAttribute('aria-label', lang === 'en' ? 'Menu' : 'Μενού');
+    if (returnFocus) menuBtn.focus({ preventScroll: true });
+  }
+  menuBtn.addEventListener('click', () => (root.classList.contains('menu-open') ? closeMenu() : openMenu()));
+  // a link closes the panel first, then the page scrolls to its section
+  $$('a[href^="#"]', menu).forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    closeMenu(false);
+    const target = $(a.getAttribute('href'));
+    requestAnimationFrame(() => {
+      if (target) target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      history.replaceState(null, '', a.getAttribute('href'));
+    });
+  }));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeMenu();
+    // keep Tab inside the open panel and its button
+    if (e.key === 'Tab' && root.classList.contains('menu-open')) {
+      const items = [menuBtn, ...$$('a, button', menu)];
+      const i = items.indexOf(document.activeElement);
+      if (e.shiftKey && i <= 0) { e.preventDefault(); items[items.length - 1].focus(); }
+      else if (!e.shiftKey && i === items.length - 1) { e.preventDefault(); items[0].focus(); }
+    }
+  });
+  matchMedia('(min-width: 1081px)').addEventListener('change', e => { if (e.matches) closeMenu(false); });
 
   /* ---------- Voices: drag, flick or step through the pages ---------- */
   (function slider() {

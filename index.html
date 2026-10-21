@@ -13,11 +13,11 @@
 <link rel="stylesheet" href="styles.css">
 <script>document.documentElement.classList.add('js')</script>
 </head>
-<body>
+<body id="top">
 <a class="skip" href="#main" data-i18n="skip">Μετάβαση στο περιεχόμενο</a>
 
-<header class="bar" id="top">
-  <a class="wordmark" href="#top" aria-label="Inner Balance, αρχή σελίδας">Inner Balance</a>
+<header class="bar">
+  <a class="wordmark" href="#top" aria-label="Inner Balance, αρχή σελίδας" data-i18n-attr="aria-label:homeL">Inner Balance</a>
   <nav aria-label="Κύρια" data-i18n-attr="aria-label:navLabel">
     <ul>
       <li><a href="#sessions" data-i18n="nav1">Συνεδρίες</a></li>
@@ -32,8 +32,30 @@
       <button type="button" data-lang="en" aria-pressed="false">EN</button>
     </div>
     <a class="btn btn-sm" href="#book" data-i18n="navCta">Ραντεβού</a>
+    <button type="button" class="menu-btn" aria-expanded="false" aria-controls="menu" aria-label="Μενού" data-i18n-attr="aria-label:menuL">
+      <span class="menu-bars" aria-hidden="true"><span></span><span></span></span>
+    </button>
   </div>
 </header>
+
+<div class="menu" id="menu" inert>
+  <nav aria-label="Μενού" data-i18n-attr="aria-label:menuL">
+    <ul class="menu-links">
+      <li><a href="#sessions" data-i18n="nav1">Συνεδρίες</a></li>
+      <li><a href="#about" data-i18n="nav2">Σχετικά</a></li>
+      <li><a href="#fees" data-i18n="nav3">Κόστος</a></li>
+      <li><a href="#faq" data-i18n="nav4">Ερωτήσεις</a></li>
+      <li><a href="#book" data-i18n="navCta">Ραντεβού</a></li>
+    </ul>
+  </nav>
+  <div class="menu-foot">
+    <div class="lang" role="group" aria-label="Γλώσσα / Language">
+      <button type="button" data-lang="el" aria-pressed="true">EL</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <a class="menu-call" href="tel:+302814029611">2814 029611</a>
+  </div>
+</div>
 
 <main id="main">
 

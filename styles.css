@@ -563,3 +563,60 @@ h3 { font-size: var(--t-state); line-height: 1.08; letter-spacing: -0.02em; }
   .js .how-steps .step-icon path { stroke-dashoffset: 0; transition: none; }
   .js .how-steps .step-icon .dot { opacity: 1; transition: none; }
 }
+/* =====================================================================
+   Mobile menu: a full-screen ink panel that opens down from the bar.
+   Opened occasionally, so it earns a drawer curve; closing is quicker.
+   ===================================================================== */
+:root { --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1); }
+.menu-btn { display: none; position: relative; width: 44px; height: 44px; border: 0; border-radius: 0; background: transparent; color: inherit; cursor: pointer; transition: transform 160ms var(--ease-out); }
+.menu-btn:active { transform: scale(0.92); }
+.menu-bars { position: absolute; inset: 0; display: grid; place-items: center; }
+.menu-bars span { position: absolute; width: 24px; height: 2.5px; background: currentColor; transition: transform 320ms var(--ease-drawer); }
+.menu-bars span:first-child { transform: translateY(-4.5px); }
+.menu-bars span:last-child { transform: translateY(4.5px); }
+.menu-open .menu-bars span:first-child { transform: rotate(45deg); }
+.menu-open .menu-bars span:last-child { transform: rotate(-45deg); }
+
+.menu {
+  position: fixed; inset: 0; z-index: 19;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: calc(var(--bar-h, 68px) + 32px) var(--m) calc(32px + env(safe-area-inset-bottom));
+  background: var(--ink); color: var(--on-dark);
+  clip-path: inset(0 0 100% 0); visibility: hidden;
+  transition: clip-path 280ms var(--ease-out), visibility 0s linear 280ms;
+  overscroll-behavior: contain; overflow-y: auto;
+}
+.menu-open .menu { clip-path: inset(0 0 0 0); visibility: visible; transition: clip-path 480ms var(--ease-drawer), visibility 0s; }
+.menu-links { display: flex; flex-direction: column; gap: 4px; }
+.menu-links a { display: block; padding: 6px 0; font-size: clamp(40px, 11vw, 72px); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; text-decoration: none; font-variation-settings: "FLAR" 60; }
+.menu-links li { opacity: 0; transform: translateY(18px); transition: opacity 200ms ease, transform 200ms var(--ease-out); }
+.menu-open .menu-links li { opacity: 1; transform: none; transition: opacity 500ms var(--ease-glide), transform 600ms var(--ease-glide); transition-delay: calc(120ms + var(--i, 0) * 45ms); }
+.menu-links li:nth-child(2) { --i: 1; } .menu-links li:nth-child(3) { --i: 2; } .menu-links li:nth-child(4) { --i: 3; } .menu-links li:nth-child(5) { --i: 4; }
+.menu-links li:last-child a { color: var(--saffron); }
+.menu-links a:active { opacity: 0.6; }
+@media (hover: hover) and (pointer: fine) { .menu-links a:hover { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 0.12em; } }
+.menu-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: 32px; opacity: 0; transition: opacity 200ms ease; }
+.menu-open .menu-foot { opacity: 1; transition: opacity 500ms ease 360ms; }
+.menu-foot .lang button { font-size: var(--t-body); min-width: 48px; }
+.menu-call { font-weight: 700; text-decoration: none; padding: 12px 0; }
+
+/* the bar sits on the panel's ink while the menu is open */
+.menu-open .bar { background: var(--ink); color: var(--on-dark); }
+.menu-open .bar .btn-sm { visibility: hidden; }
+.menu-open { overflow: hidden; }
+
+@media (max-width: 1080px) {
+  .menu-btn { display: block; }
+}
+@media (max-width: 560px) {
+  .bar-end > .lang { display: none; }
+}
+@media (min-width: 1081px) {
+  .menu { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu, .menu-open .menu { clip-path: none; transition: opacity 200ms ease, visibility 0s linear 200ms; opacity: 0; }
+  .menu-open .menu { opacity: 1; transition: opacity 200ms ease; }
+  .menu-links li, .menu-open .menu-links li { transform: none; transition: opacity 200ms ease; }
+  .menu-bars span { transition: none; }
+}
