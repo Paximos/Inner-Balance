@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -69,7 +69,12 @@
     fContact: 'Contact', fHours: 'Hours', fHoursV: 'Monday – Friday 09:00–21:00<br>Saturday by arrangement',
     fPage: 'Page', privacy: 'Privacy policy',
     legal: '© 2026 Antonis Paximadakis, psychologist. Confidentiality and data protection under the GDPR.',
-    photos: 'Images, printed in one ink:'
+    photos: 'Images, printed in one ink:',
+    prevL: 'Previous testimonial', nextL: 'Next testimonial', voicesL: 'Testimonials', dragHint: 'Drag for the next one',
+    glanceH: 'At a glance',
+    glanceP: 'Everything worth knowing before the first meeting. Pick them up, toss them around; they always find their balance in the end.',
+    g1: 'Adults', g2: 'Couples', g3: 'Families', g4: 'Teenagers', g5: '50–60 minutes', g6: 'from 30€', g7: 'Online via Webex',
+    g8: 'Greek', g9: '154 Megalou Alexandrou', g10: 'Mon–Fri 09:00–21:00', g11: 'Confidentiality', g12: 'Receipt for your insurer'
   };
 
   const SESS = {
@@ -106,7 +111,41 @@
     renderPick();
     updateFadeCap();
     updateOpen();
+    resplit();
+    document.dispatchEvent(new CustomEvent('langchange'));
     try { localStorage.setItem('ib-lang', next); } catch (e) {}
+  }
+
+  /* ---------- Headings rise word by word out of their own line ---------- */
+  const splitTargets = () => $$('h1, h2');
+  function split(el) {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    let w = 0;
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach(part => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+        const outer = document.createElement('span'); outer.className = 'split-w';
+        const inner = document.createElement('span'); inner.className = 'split-wi';
+        inner.textContent = part; inner.style.setProperty('--w', Math.min(w++, 12));
+        outer.appendChild(inner); frag.appendChild(outer);
+      });
+      node.replaceWith(frag);
+    });
+  }
+  function resplit() {
+    if (reduce) return;
+    splitTargets().forEach(el => {
+      if (el.querySelector('.split-w')) return;
+      split(el);
+      if (el.classList.contains('is-in')) {
+        el.classList.add('no-anim');
+        requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove('no-anim')));
+      }
+    });
   }
   $$('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
 
@@ -125,30 +164,82 @@
     $('meta[name="theme-color"]').setAttribute('content', TONE_HEX[s.tone]);
     $$('.sess-rows .row').forEach(r => r.classList.toggle('is-picked', r.dataset.who === who));
   }
+  /* The new cover colour spreads from the chip that was pressed.
+     Interruptible: a second press commits the running wipe and starts from there. */
+  const wipe = $('.cover-wipe');
+  let wipeAnim = null;
+  function wipeCover(tone, origin) {
+    const r = cover.getBoundingClientRect();
+    if (reduce || !wipe.animate || r.bottom < 0 || r.top > innerHeight) return false;
+    if (wipeAnim) wipeAnim.finish();
+    const o = origin ? origin.getBoundingClientRect() : null;
+    const x = o ? o.left + o.width / 2 - r.left : r.width / 2;
+    const y = o ? o.top + o.height / 2 - r.top : r.height / 2;
+    const radius = Math.hypot(Math.max(x, r.width - x), Math.max(y, r.height - y));
+    wipe.style.background = TONE_HEX[tone];
+    wipeAnim = wipe.animate(
+      [{ clipPath: `circle(0px at ${x}px ${y}px)` }, { clipPath: `circle(${radius}px at ${x}px ${y}px)` }],
+      { duration: 650, easing: 'cubic-bezier(0.77, 0, 0.175, 1)' }
+    );
+    wipeAnim.onfinish = () => { renderPick(); wipeAnim = null; };
+    return true;
+  }
   function choose(value, from) {
     who = value;
     $$(`input[name="who"][value="${value}"], input[name="bwho"][value="${value}"]`).forEach(i => { if (i !== from) i.checked = true; });
-    renderPick();
+    const fromCover = from && cover.contains(from);
+    if (fromCover && wipeCover(SESS[value].tone, from.closest('label'))) {
+      // the words change at once; the colour lands when the wipe does
+      $('#pick-title').textContent = SESS[value][lang][0];
+      $('#pick-meta').textContent = SESS[value][lang][1];
+    } else {
+      renderPick();
+    }
   }
   $$('input[name="who"], input[name="bwho"]').forEach(i => i.addEventListener('change', () => i.checked && choose(i.value, i)));
   $$('.sess-rows .row').forEach(r => r.addEventListener('click', () => choose(r.dataset.who)));
 
-  /* Bar follows the cover, then turns to paper */
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => bar.classList.toggle('on-paper', !e.isIntersecting), { rootMargin: '-68px 0px 0px 0px' }).observe(cover);
+  /* Header takes the ground of whichever section sits under its middle */
+  const grounds = $$('[data-ground]').filter(el => !bar.contains(el));
+  let groundTick = false;
+  function updateGround() {
+    groundTick = false;
+    const mid = bar.getBoundingClientRect().height / 2;
+    let g = 'cover';
+    for (const el of grounds) {
+      const r = el.getBoundingClientRect();
+      if (r.top <= mid && r.bottom > mid) g = el.dataset.ground;
+    }
+    if (bar.dataset.ground !== g) bar.dataset.ground = g;
   }
+  const onScrollGround = () => { if (!groundTick) { groundTick = true; requestAnimationFrame(updateGround); } };
+  addEventListener('scroll', onScrollGround, { passive: true });
+  addEventListener('resize', onScrollGround, { passive: true });
+  updateGround();
 
-  /* ---------- Reveal with stagger per section ---------- */
+  /* ---------- Reveals: blocks rise, headings split, pictures open ---------- */
+  splitTargets().forEach(h => h.classList.remove('reveal'));
+  $$('.frontis img, .plate-img, .fade-stack').forEach(el => el.classList.add('wipe'));
   if ('IntersectionObserver' in window && !reduce) {
-    $$('section, figure.plate, figure.engraving').forEach(sec => {
-      $$('.reveal', sec).forEach((el, i) => el.style.setProperty('--d', `${Math.min(i, 6) * 80}ms`));
+    $$('section, figure.plate').forEach(sec => {
+      $$('.reveal', sec).forEach((el, i) => el.style.setProperty('--d', `${Math.min(i, 5) * 100}ms`));
     });
     const io = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-    $$('.reveal').forEach(el => io.observe(el));
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in', 'is-in');
+        // a fully clipped picture never reports as visible, so its wrapper is watched instead
+        $$('.wipe', e.target).forEach(w => w.classList.add('in'));
+        io.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    const wipeHosts = [...new Set($$('.wipe').map(w => w.parentElement))];
+    const ready = Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 500))]);
+    ready.then(() => {
+      $$('.reveal, .tags').concat(splitTargets(), wipeHosts).forEach(el => io.observe(el));
+    });
   } else {
-    $$('.reveal').forEach(el => el.classList.add('in'));
+    $$('.reveal, .wipe, .tags').concat(splitTargets()).forEach(el => el.classList.add('in', 'is-in'));
   }
 
   /* ---------- Plate drift ---------- */
@@ -217,44 +308,6 @@
   }
   setInterval(updateOpen, 60000);
 
-  /* ---------- Many into one: the diagram ---------- */
-  function rng(seed) { return () => (seed = (seed * 16807) % 2147483647) / 2147483647; }
-  const NS = 'http://www.w3.org/2000/svg';
-  function sq(svg, x, y, s, fill, op, delay, from) {
-    const r = document.createElementNS(NS, 'rect');
-    r.setAttribute('x', x.toFixed(1)); r.setAttribute('y', y.toFixed(1));
-    r.setAttribute('width', s); r.setAttribute('height', s);
-    r.setAttribute('fill', fill); r.setAttribute('opacity', op);
-    r.style.transitionDelay = `${delay}ms`;
-    r.dataset.from = from;
-    svg.appendChild(r);
-  }
-  function drawH(svg) {
-    const R = rng(7); const s = 12;
-    for (let i = 0; i < 46; i++) sq(svg, 10 + R() * 360, 14 + R() * 230, s, '#F1F1EF', i % 2 ? 0.35 : 0.7, i * 10, `${(R() - .5) * 120}px,${(R() - .5) * 120}px`);
-    for (let c = 0; c < 20; c++) for (let rI = 0; rI < 3; rI++) sq(svg, 420 + c * 18, 112 + rI * 16, s, '#F1F1EF', 0.9, 300 + c * 12, `${(R() - .5) * 160 - 120}px,${(R() - .5) * 200}px`);
-    for (let rI = 0; rI < 5; rI++) for (let c = 0; c < 9; c++) sq(svg, 828 + c * 41, 34 + rI * 46, s + 6, '#F1F1EF', 1, 560 + (rI * 9 + c) * 8, `${(R() - .5) * 120 - 200}px,${(R() - .5) * 160}px`);
-  }
-  function drawV(svg) {
-    const R = rng(11); const s = 10;
-    for (let i = 0; i < 34; i++) sq(svg, 14 + R() * 270, 6 + R() * 110, s, '#F1F1EF', i % 2 ? 0.35 : 0.7, i * 10, `${(R() - .5) * 80}px,${(R() - .5) * 80}px`);
-    for (let rI = 0; rI < 9; rI++) for (let c = 0; c < 3; c++) sq(svg, 130 + c * 14, 140 + rI * 14, s, '#F1F1EF', 0.9, 260 + rI * 18, `${(R() - .5) * 120}px,${(R() - .5) * 60 - 80}px`);
-    for (let rI = 0; rI < 4; rI++) for (let c = 0; c < 7; c++) sq(svg, 26 + c * 40, 290 + rI * 28, s + 4, '#F1F1EF', 1, 440 + (rI * 7 + c) * 10, `${(R() - .5) * 100}px,${-90 - R() * 60}px`);
-  }
-  const dgH = $('.dg-h'), dgV = $('.dg-v');
-  if (dgH) drawH(dgH);
-  if (dgV) drawV(dgV);
-  const diagram = $('.how-diagram');
-  if (diagram && !reduce && 'IntersectionObserver' in window) {
-    $$('rect', diagram).forEach(r => { r.style.transform = `translate(${r.dataset.from})`; r.style.opacity = '0'; });
-    const dio = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) {
-        requestAnimationFrame(() => $$('rect', diagram).forEach(r => { r.style.transform = ''; r.style.opacity = ''; }));
-        dio.disconnect();
-      }
-    }, { threshold: 0.15 });
-    dio.observe(diagram);
-  }
 
   /* ---------- The coupon: compose the email ---------- */
   const err = $('#form-error');
@@ -288,6 +341,179 @@
     setTimeout(() => { submitBtn.textContent = en ? EN.submit : 'Ετοιμάστε το email'; }, 4000);
   });
   $$('input, select, textarea', coupon).forEach(el => el.addEventListener('input', () => el.removeAttribute('aria-invalid')));
+
+  /* ---------- Voices: drag, flick or step through the pages ---------- */
+  (function slider() {
+    const track = $('.voices .slips');
+    if (!track) return;
+    const host = $('.voices .slider');
+    const items = $$('.slip', track);
+    const prev = $('[data-prev]'), next = $('[data-next]'), count = $('[data-index]');
+    const last = items.length - 1;
+    let index = 0;
+    // the last page lands flush with the right margin instead of leaving an empty half
+    const offset = i => -Math.min(items[i].offsetLeft - items[0].offsetLeft, Math.max(0, track.scrollWidth - host.clientWidth));
+    const setX = (x, settle) => {
+      track.classList.toggle('is-settling', settle && !reduce);
+      track.style.setProperty('--slide-x', `${x}px`);
+    };
+    const paint = () => {
+      items.forEach((it, i) => it.toggleAttribute('data-active', i === index));
+      prev.setAttribute('aria-disabled', String(index <= 0));
+      next.setAttribute('aria-disabled', String(index >= last));
+      count.textContent = index + 1;
+    };
+    const go = i => { index = Math.max(0, Math.min(last, i)); setX(offset(index), true); paint(); };
+
+    // one pointer at a time; lock to an axis after 6px so vertical scroll still works
+    let id = null, x0 = 0, y0 = 0, t0 = 0, xNow = 0, tNow = 0, base = 0, axis = null, dragged = false;
+    host.addEventListener('pointerdown', e => {
+      if (id !== null || e.button > 0) return;
+      id = e.pointerId; x0 = xNow = e.clientX; y0 = e.clientY; t0 = tNow = e.timeStamp;
+      base = offset(index); axis = null; dragged = false;
+    });
+    host.addEventListener('pointermove', e => {
+      if (e.pointerId !== id) return;
+      const dx = e.clientX - x0, dy = e.clientY - y0;
+      if (!axis) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+        if (axis === 'x') { host.setPointerCapture(id); track.classList.add('is-dragging'); }
+      }
+      if (axis !== 'x') return;
+      dragged = true; xNow = e.clientX; tNow = e.timeStamp;
+      const pastEdge = (index === 0 && dx > 0) || (index === last && dx < 0);
+      setX(base + (pastEdge ? dx / 3 : dx), false); // friction past the ends instead of a wall
+    });
+    const end = e => {
+      if (e.pointerId !== id) return;
+      id = null; track.classList.remove('is-dragging');
+      if (axis !== 'x') return;
+      const dx = xNow - x0, v = dx / Math.max(1, tNow - t0); // a quick flick is enough
+      if (dx < -40 || v < -0.35) go(index + 1);
+      else if (dx > 40 || v > 0.35) go(index - 1);
+      else go(index);
+    };
+    host.addEventListener('pointerup', end);
+    host.addEventListener('pointercancel', end);
+    host.addEventListener('click', e => { if (dragged) { e.preventDefault(); e.stopPropagation(); dragged = false; } }, true);
+    track.addEventListener('dragstart', e => e.preventDefault());
+    prev.addEventListener('click', () => go(index - 1));
+    next.addEventListener('click', () => go(index + 1));
+    track.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(index + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(index - 1); }
+    });
+    let w = innerWidth;
+    addEventListener('resize', () => { if (innerWidth !== w) { w = innerWidth; setX(offset(index), false); } }, { passive: true });
+    paint();
+  })();
+
+  /* ---------- The price counts up once, then rests ---------- */
+  (function countUp() {
+    const el = $('.count');
+    if (!el || reduce || !('IntersectionObserver' in window)) return;
+    const target = parseInt(el.dataset.count, 10);
+    const ease = t => 1 - Math.pow(1 - t, 4);
+    el.textContent = '0';
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      let start = 0;
+      const tick = now => {
+        start ||= now + 450;
+        const p = Math.min(1, Math.max(0, (now - start) / 1600));
+        el.textContent = Math.round(target * ease(p));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }, { threshold: 0.4 });
+    io.observe(el);
+  })();
+
+  /* ---------- At a glance: the facts fall, can be thrown, and settle ---------- */
+  (function glance() {
+    const section = $('.glance');
+    const list = $('[data-tags]');
+    if (!section || !list) return;
+    const tags = $$('.tag', list);
+    tags.forEach((t, i) => t.style.setProperty('--i', i));
+    // physics only where a mouse can throw them; touch and reduced motion keep the settled pile
+    if (reduce || !matchMedia('(hover: hover) and (pointer: fine)').matches || !('IntersectionObserver' in window)) return;
+
+    let M = null, engine = null, bodies = [], raf = 0, visible = false, mouse = null, grab = null;
+    const loadMatter = () => new Promise((resolve, reject) => {
+      if (window.Matter) return resolve(window.Matter);
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js';
+      s.onload = () => resolve(window.Matter); s.onerror = reject;
+      document.head.appendChild(s);
+    });
+
+    function build() {
+      cancelAnimationFrame(raf);
+      if (engine) { M.World.clear(engine.world, false); M.Engine.clear(engine); }
+      list.classList.remove('is-live');
+      section.style.minHeight = '';
+      const sizes = tags.map(t => [t.offsetWidth, t.offsetHeight]);
+      // keep the band's in-flow height once the tags leave the flow
+      section.style.minHeight = `${section.offsetHeight}px`;
+      const W = section.clientWidth, H = section.clientHeight;
+      const m = parseFloat(getComputedStyle(section).paddingLeft) || 16; // walls sit on the page margins
+      list.classList.add('is-live');
+      engine = M.Engine.create({ enableSleeping: true });
+      engine.gravity.y = 1.1;
+      const wall = { isStatic: true };
+      M.Composite.add(engine.world, [
+        M.Bodies.rectangle(W / 2, H + 50 - (parseFloat(getComputedStyle(section).paddingBottom) || 24), W * 2, 100, wall), // floor on the padding line
+        M.Bodies.rectangle(m - 50, H / 2, 100, H * 4, wall),
+        M.Bodies.rectangle(W - m + 50, H / 2, 100, H * 4, wall),
+        M.Bodies.rectangle(W / 2, -H * 1.5, W * 2, 100, wall)
+      ]);
+      bodies = tags.map((t, i) => {
+        const [w, h] = sizes[i];
+        const b = M.Bodies.rectangle(m + w / 2 + Math.random() * Math.max(0, W - 2 * m - w), -h - i * 64, w, h, { restitution: 0.25, friction: 0.4, frictionAir: 0.012, angle: (Math.random() - 0.5) * 0.5 });
+        b.plugin = { el: t, w, h };
+        return b;
+      });
+      M.Composite.add(engine.world, bodies);
+      mouse = M.Mouse.create(section);
+      // never steal the page's scroll wheel
+      section.removeEventListener('wheel', mouse.mousewheel);
+      section.removeEventListener('mousewheel', mouse.mousewheel);
+      section.removeEventListener('DOMMouseScroll', mouse.mousewheel);
+      grab = M.MouseConstraint.create(engine, { mouse, constraint: { stiffness: 0.18, render: { visible: false } } });
+      M.Composite.add(engine.world, grab);
+      loop();
+    }
+    function loop() {
+      if (!visible || document.hidden) return;
+      M.Engine.update(engine, 1000 / 60);
+      for (const b of bodies) {
+        const { el, w, h } = b.plugin;
+        el.style.transform = `translate(${(b.position.x - w / 2).toFixed(1)}px, ${(b.position.y - h / 2).toFixed(1)}px) rotate(${b.angle.toFixed(3)}rad)`;
+      }
+      raf = requestAnimationFrame(loop);
+    }
+    const resume = () => { cancelAnimationFrame(raf); if (engine) loop(); };
+    let started = false;
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible && !started) {
+        started = true;
+        loadMatter().then(m => { M = m; build(); }).catch(() => list.classList.add('in'));
+      } else resume();
+    }, { rootMargin: '120px 0px' }).observe(section);
+    // grab on the press itself, so a quick drag that leaves the tag within one frame still catches it
+    section.addEventListener('mousedown', () => setTimeout(() => { if (grab) M.MouseConstraint.update(grab, bodies); }, 0)); // after Matter's own listener records the press
+    document.addEventListener('visibilitychange', resume);
+    document.addEventListener('langchange', () => { if (M) build(); });
+    let rw = innerWidth, rt = 0;
+    addEventListener('resize', () => {
+      if (!M || innerWidth === rw) return;
+      rw = innerWidth; clearTimeout(rt); rt = setTimeout(build, 200);
+    }, { passive: true });
+  })();
 
   /* ---------- Start ---------- */
   let saved = 'el';
