@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-21T13:16:37.161Z",
+        "reason": "Claude triage: full-bleed section fields (cover, rows, bands, fields) inset their text by the page margin var(--m) 16-40px; measured in live browser"
+      }
+    ]
+  }
+}

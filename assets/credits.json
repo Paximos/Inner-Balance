@@ -1,0 +1,75 @@
+﻿[
+  {
+    "file": "assets/portrait.webp",
+    "title": "Portrait of Antonis Paximadakis",
+    "creator": "Practitioner-owned",
+    "license": "Owned by the client; copied from https://inner-balance.gr/portrait.webp",
+    "creditRequired": false,
+    "notes": "Used unaltered."
+  },
+  {
+    "file": "assets/logo.webp",
+    "title": "Inner Balance logo",
+    "creator": "Practitioner-owned",
+    "license": "Owned by the client; copied from https://inner-balance.gr/logo.webp",
+    "creditRequired": false,
+    "notes": "Used as the favicon only."
+  },
+  {
+    "file": "assets/admiralty-chart-no-1904-crete-megalo-kastron.jpg",
+    "ref": "commons:83994112",
+    "title": "Admiralty Chart No 1904 Crete Megalo Kastron or Candia (Heraklion), published 1897",
+    "creator": "United Kingdom Hydrographic Office",
+    "license": "Public domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Admiralty_Chart_No_1904_Crete_Megalo_Kastron_or_Candia_(Heraklion),_published_1897.jpg",
+    "notes": "Source file for the two plates below; not shipped on the page itself."
+  },
+  {
+    "file": "assets/plate-harbour-engraving.jpg",
+    "derivedFrom": "commons:83994112",
+    "title": "View of Heraklion harbour (inset engraving 'View from B')",
+    "creator": "United Kingdom Hydrographic Office",
+    "license": "Public domain",
+    "notes": "Crop x632 y1142 w800 h200 of the 1920px Commons rendition, imprint line removed, upscaled 1.5x, printed in one ink #1F4A3A on paper #F1F1EF."
+  },
+  {
+    "file": "assets/plate-plan.jpg",
+    "derivedFrom": "commons:83994112",
+    "title": "Plan of Heraklion within the Venetian walls, 1897",
+    "creator": "United Kingdom Hydrographic Office",
+    "license": "Public domain",
+    "notes": "Crop x560 y560 w1000 h760 of the 1920px Commons rendition, printed in one ink #1D4E89 on paper #F1F1EF."
+  },
+  {
+    "file": "assets/plate-koules.jpg",
+    "derivedFrom": "commons:36005935",
+    "title": "A08 Koules 844",
+    "creator": "C messier",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "page": "https://commons.wikimedia.org/w/index.php?curid=36005935",
+    "notes": "Scaled to 1440px, printed in one ink #1D4E89 on paper #F1F1EF."
+  },
+  {
+    "file": "assets/plate-fortress.jpg",
+    "derivedFrom": "commons:39430547",
+    "title": "Venetian fortress Heraklion port",
+    "creator": "Jebulon",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "page": "https://commons.wikimedia.org/w/index.php?curid=39430547",
+    "notes": "Scaled to 1440px, printed in one ink #1D4E89 on paper #F1F1EF."
+  },
+  {
+    "file": "assets/plate-lions.jpg",
+    "derivedFrom": "commons:26133747",
+    "title": "Morosini Fountain in Heracleion, Crete island, Greece 002",
+    "creator": "Moonik",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Morosini_Fountain_in_Heracleion,_Crete_island,_Greece_002.jpg",
+    "creditRequired": true,
+    "notes": "Scaled to 1440px and recoloured to one ink #1D4E89 on paper #F1F1EF; this altered version is shared under CC BY-SA 3.0. Credited in the footer."
+  }
+]

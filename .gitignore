@@ -1,0 +1,7 @@
+# local tooling output
+.taste-skill/inspect/
+.claude/
+.impeccable/review/
+.impeccable/live/
+.impeccable/config.local.json
+.impeccable/hook.cache.json
