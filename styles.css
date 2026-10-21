@@ -466,7 +466,7 @@ h3 { font-size: var(--t-state); line-height: 1.08; letter-spacing: -0.02em; }
 .glance-copy { position: relative; z-index: 2; max-width: 60ch; pointer-events: none; }
 .glance-lead { margin-top: 24px; font-size: var(--t-state); line-height: 1.35; }
 .tags { position: relative; z-index: 1; display: flex; flex-wrap: wrap-reverse; justify-content: center; gap: 10px; margin-top: 64px; }
-.tag { display: inline-flex; align-items: center; min-height: 56px; padding: 0 22px; font-weight: 750; font-size: var(--t-state); letter-spacing: -0.01em; white-space: nowrap; color: var(--on-dark); user-select: none; }
+.tag { display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; font-weight: 750; font-size: var(--t-body); letter-spacing: 0; white-space: nowrap; color: var(--on-dark); user-select: none; }
 .tag.t-paper { background: var(--paper-2); color: var(--ink); }
 .js .tags:not(.is-live) .tag { opacity: 0; }
 .js .tags.in:not(.is-live) .tag { animation: tag-drop 0.75s cubic-bezier(.34, 1.56, .64, 1) calc(var(--i, 0) * 60ms) both; }
@@ -491,7 +491,7 @@ h3 { font-size: var(--t-state); line-height: 1.08; letter-spacing: -0.02em; }
 @media (max-width: 860px) {
   .voices-head { flex-direction: column; align-items: flex-start; }
   .voices .slip { flex-basis: 84vw; }
-  .glance { min-height: 0; }
+  .glance { min-height: 0; padding-bottom: var(--gap); }
 }
 
 @media (prefers-reduced-motion: reduce) {

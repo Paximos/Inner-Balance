@@ -11,6 +11,12 @@
         ],
         "createdAt": "2026-10-21T13:16:37.161Z",
         "reason": "Claude triage: full-bleed section fields (cover, rows, bands, fields) inset their text by the page margin var(--m) 16-40px; measured in live browser"
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(.34, 1.56, .64, 1)",
+        "createdAt": "2026-10-21T13:40:17.291Z",
+        "reason": "Claude triage: literal drop of falling tags (touch/no-physics fallback), modelled on designbyency.com; Emil allows small bounce for playful physical motion"
       }
     ]
   }

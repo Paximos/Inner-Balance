@@ -492,7 +492,10 @@
       cancelAnimationFrame(raf);
       if (engine) { M.World.clear(engine.world, false); M.Engine.clear(engine); }
       list.classList.remove('is-live');
+      section.style.minHeight = '';
       const sizes = tags.map(t => [t.offsetWidth, t.offsetHeight]);
+      // keep the band's in-flow height once the tags leave the flow
+      section.style.minHeight = `${section.offsetHeight}px`;
       const W = section.clientWidth, H = section.clientHeight;
       const m = parseFloat(getComputedStyle(section).paddingLeft) || 16; // walls sit on the page margins
       list.classList.add('is-live');
@@ -500,7 +503,7 @@
       engine.gravity.y = 1.1;
       const wall = { isStatic: true };
       M.Composite.add(engine.world, [
-        M.Bodies.rectangle(W / 2, H + 50 - 24, W * 2, 100, wall),
+        M.Bodies.rectangle(W / 2, H + 50 - (parseFloat(getComputedStyle(section).paddingBottom) || 24), W * 2, 100, wall), // floor on the padding line
         M.Bodies.rectangle(m - 50, H / 2, 100, H * 4, wall),
         M.Bodies.rectangle(W - m + 50, H / 2, 100, H * 4, wall),
         M.Bodies.rectangle(W / 2, -H * 1.5, W * 2, 100, wall)
