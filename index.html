@@ -38,9 +38,10 @@
 <main id="main">
 
 <!-- Cover -->
-<section class="cover" id="cover" data-tone="green" aria-labelledby="h-name">
+<section class="cover" id="cover" data-tone="green" data-ground="cover" aria-labelledby="h-name">
+  <div class="cover-wipe" aria-hidden="true"></div>
   <div class="cover-text">
-    <h1 id="h-name" class="reveal"><span>Αντώνης</span> <span>Παξιμαδάκης</span></h1>
+    <h1 id="h-name"><span>Αντώνης</span> <span>Παξιμαδάκης</span></h1>
     <p class="lede reveal" data-i18n="lede">Ψυχολόγος στο Ηράκλειο. Ατομική, ζεύγους και οικογενειακή θεραπεία, στο γραφείο ή online, στα ελληνικά και στα αγγλικά.</p>
 
     <fieldset class="picker reveal">
@@ -55,7 +56,7 @@
     </fieldset>
 
     <div class="cover-actions reveal">
-      <a class="btn" href="#book" id="cover-cta" data-i18n="coverCta">Ζητήστε πρώτο ραντεβού</a>
+      <a class="btn btn-arrow" href="#book" id="cover-cta" data-i18n="coverCta">Ζητήστε πρώτο ραντεβού</a>
       <a class="call" href="tel:+302814029611"><span data-i18n="orCall">ή καλέστε</span> 2814 029611</a>
     </div>
   </div>
@@ -67,7 +68,7 @@
 </section>
 
 <!-- About: statement in two columns -->
-<section class="about" id="about" aria-labelledby="h-about">
+<section class="about" id="about" data-ground="paper" aria-labelledby="h-about">
   <h2 id="h-about" class="reveal" data-i18n="aboutH">Λίγα λόγια για μένα</h2>
   <div class="statement reveal" data-i18n="aboutText">
     <p><b>Είμαι ο Αντώνης Παξιμαδάκης,</b> ψυχολόγος με άδεια άσκησης επαγγέλματος από τη Διεύθυνση Δημόσιας Υγείας της <b>Περιφέρειας Κρήτης</b>. Σπούδασα ψυχολογία στο <b>Πανεπιστήμιο Νεάπολις Πάφου</b> και έκανα μεταπτυχιακό στην <b>Εφαρμοσμένη Αναπτυξιακή Ψυχολογία</b> στο Ελληνικό Ανοικτό Πανεπιστήμιο. Έχω δουλέψει στο <b>Κέντρο Ψυχικής Υγείας Ηρακλείου</b>, σε νοσοκομεία και σε ιδιωτική πρακτική, με ενήλικες, εφήβους, ζευγάρια και οικογένειες. Πιστεύω ότι κάθε άνθρωπος αξίζει έναν χώρο όπου μπορεί να μιλήσει ελεύθερα, χωρίς να κριθεί. Δουλεύω με <b>επιστημονικά τεκμηριωμένες μεθόδους</b>, προσαρμοσμένες σε εσάς και στους στόχους σας, και συνεχίζω να εκπαιδεύομαι μέσα από εποπτεία. Οι συνεδρίες γίνονται <b>στα ελληνικά ή στα αγγλικά</b>, στο γραφείο ή online.</p>
@@ -83,13 +84,13 @@
 </section>
 
 <!-- Plate -->
-<figure class="plate">
+<figure class="plate" data-ground="paper">
   <div class="plate-img"><img src="assets/plate-harbour-engraving.jpg" width="1200" height="300" alt="Χαρακτικό του 19ου αιώνα: το λιμάνι του Ηρακλείου με το φρούριο, τα καράβια και ανθρώπους στην ακτή" data-i18n-attr="alt:plateAlt"></div>
   <figcaption data-i18n="plateCap">Το λιμάνι του Ηρακλείου, χαρακτικό από χάρτη του Βρετανικού Ναυαρχείου, 1897.</figcaption>
 </figure>
 
 <!-- Sessions: statement cell + coloured rows -->
-<section class="sessions" id="sessions" aria-labelledby="h-sessions">
+<section class="sessions" id="sessions" data-ground="paper" aria-labelledby="h-sessions">
   <div class="sess-cell">
     <h2 id="h-sessions" class="zig reveal"><span data-i18n="sessH1">Τέσσερις τρόποι</span><span data-i18n="sessH2">να δουλέψουμε μαζί</span></h2>
     <div class="sess-foot reveal">
@@ -122,7 +123,7 @@
 </section>
 
 <!-- How it starts: many into one -->
-<section class="how" id="how" aria-labelledby="h-how">
+<section class="how" id="how" data-ground="blue" aria-labelledby="h-how">
   <div class="how-head">
     <h2 id="h-how" class="reveal" data-i18n="howH">Πώς ξεκινάμε</h2>
     <p class="reveal" data-i18n="howP">Δεν χρειάζεται να ξέρετε από πού να αρχίσετε. Αρκεί ένα μήνυμα ή ένα τηλεφώνημα· τα υπόλοιπα τα βρίσκουμε μαζί.</p>
@@ -138,30 +139,62 @@
   </ol>
 </section>
 
-<!-- Voices: paper slips -->
-<section class="voices" id="voices" aria-labelledby="h-voices">
-  <h2 id="h-voices" class="reveal" data-i18n="voicesH">Τι λένε όσοι ήρθαν</h2>
-  <div class="slips">
-    <blockquote class="slip s1 reveal" lang="en">
+<!-- Voices: a draggable run of pages -->
+<section class="voices" id="voices" data-ground="ink" aria-labelledby="h-voices">
+  <div class="voices-head">
+    <h2 id="h-voices" data-i18n="voicesH">Τι λένε όσοι ήρθαν</h2>
+    <div class="slider-ctrl reveal">
+      <button type="button" class="arrow-btn" data-prev aria-label="Προηγούμενη μαρτυρία" data-i18n-attr="aria-label:prevL"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></button>
+      <p class="slider-count" aria-live="polite"><span data-index>1</span> / 3</p>
+      <button type="button" class="arrow-btn" data-next aria-label="Επόμενη μαρτυρία" data-i18n-attr="aria-label:nextL"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg></button>
+    </div>
+  </div>
+  <div class="slider reveal" role="region" aria-roledescription="carousel" aria-label="Μαρτυρίες" data-i18n-attr="aria-label:voicesL">
+    <div class="slips" tabindex="0">
+    <blockquote class="slip s1" lang="en">
       <p class="who">Anika</p>
       <p class="role" data-i18n="v1r">Θεραπεία στα αγγλικά</p>
       <p>“I was very happy to find a psychologist I could communicate with in English since I don’t speak Greek. Excellent listener and very easy to talk to.”</p>
     </blockquote>
-    <blockquote class="slip s2 reveal">
+    <blockquote class="slip s2">
       <p class="who" data-i18n="v2n">Ειρήνη</p>
       <p class="role" data-i18n="v2r">Ατομική θεραπεία</p>
       <p data-i18n="v2q">«Σε μια πολύ δύσκολη προσωπική φάση, ο Αντώνης με βοήθησε να ξεπεράσω συναισθήματα που δεν μου επέτρεπαν να συμφιλιωθώ με τον εαυτό μου.»</p>
     </blockquote>
-    <blockquote class="slip s3 reveal">
+    <blockquote class="slip s3">
       <p class="who" data-i18n="v3n">Γιάννης</p>
       <p class="role" data-i18n="v3r">Ατομική θεραπεία</p>
       <p data-i18n="v3q">«Η εμπειρία μου από τη θεραπεία ήταν πολύ καλή. Με βοήθησε να βγω από μια περίοδο κατάθλιψης και να βάλω ξανά στη ζωή μου πράγματα που μου δίνουν χαρά. Νιώθω ότι έχω βρει καλύτερη ισορροπία στην καθημερινότητά μου.»</p>
     </blockquote>
   </div>
+  </div>
+  <p class="drag-hint reveal" aria-hidden="true" data-i18n="dragHint">Σύρετε για τις επόμενες</p>
 </section>
 
+<!-- At a glance: facts that fall and settle -->
+<section class="glance" id="glance" data-ground="paper" aria-labelledby="h-glance">
+  <div class="glance-copy">
+    <h2 id="h-glance" data-i18n="glanceH">Με μια ματιά</h2>
+    <p class="reveal glance-lead" data-i18n="glanceP">Ό,τι χρειάζεται να ξέρετε πριν από την πρώτη συνάντηση. Πιάστε τα, ανακατέψτε τα· στο τέλος βρίσκουν πάντα την ισορροπία τους.</p>
+  </div>
+  <ul class="tags" data-tags>
+    <li class="tag t-green" data-i18n="g1">Ενήλικες</li>
+    <li class="tag t-red" data-i18n="g2">Ζευγάρια</li>
+    <li class="tag t-blue" data-i18n="g3">Οικογένειες</li>
+    <li class="tag t-ink" data-i18n="g4">Έφηβοι</li>
+    <li class="tag t-paper" data-i18n="g5">50–60 λεπτά</li>
+    <li class="tag t-green" data-i18n="g6">από 30€</li>
+    <li class="tag t-blue" data-i18n="g7">Online μέσω Webex</li>
+    <li class="tag t-paper" data-i18n="g8">Ελληνικά</li>
+    <li class="tag t-paper">English</li>
+    <li class="tag t-red" data-i18n="g9">Μεγ. Αλεξάνδρου 154</li>
+    <li class="tag t-ink" data-i18n="g10">Δευ–Παρ 09:00–21:00</li>
+    <li class="tag t-green" data-i18n="g11">Εχεμύθεια</li>
+    <li class="tag t-blue" data-i18n="g12">Απόδειξη για το ταμείο σας</li>
+  </ul>
+</section>
 <!-- Fees: two fields -->
-<section class="fees" id="fees" aria-labelledby="h-fees">
+<section class="fees" id="fees" data-ground="green" aria-labelledby="h-fees">
   <div class="field f-main">
     <div class="field-top reveal">
       <h2 id="h-fees" data-i18n="feesH">Κόστος</h2>
@@ -169,7 +202,7 @@
     </div>
     <p class="incl reveal" data-i18n="feesIncl">Παίρνετε απόδειξη παροχής υπηρεσιών ψυχολόγου για το ασφαλιστικό σας ταμείο. Ακυρώσεις μέσα σε 24 ώρες ενδέχεται να χρεωθούν.</p>
     <div class="field-foot reveal">
-      <p class="price"><span data-i18n="from">από</span> 30€<small data-i18n="perSession">ανά συνεδρία</small></p>
+      <p class="price"><span data-i18n="from">από</span> <b class="count" data-count="30">30</b>€<small data-i18n="perSession">ανά συνεδρία</small></p>
       <a class="btn" href="#book" data-i18n="feesCta">Κλείστε ραντεβού</a>
     </div>
   </div>
@@ -186,7 +219,7 @@
 </section>
 
 <!-- FAQ: a band per question -->
-<section class="faq" id="faq" aria-labelledby="h-faq">
+<section class="faq" id="faq" data-ground="red" aria-labelledby="h-faq">
   <div class="band band-head"><h2 id="h-faq" class="reveal" data-i18n="faqH">Ερωτήσεις</h2></div>
   <div class="band reveal"><h3 data-i18n="q1">Πόσο διαρκεί η πρώτη συνεδρία;</h3><p data-i18n="a1">60 λεπτά. Είναι αφιερωμένη στη γνωριμία μας, στο να καταλάβω τι σας απασχολεί και στο να ορίσουμε μαζί τους θεραπευτικούς στόχους.</p></div>
   <div class="band reveal"><h3 data-i18n="q2">Πόσο κοστίζει μια συνεδρία;</h3><p data-i18n="a2">Η ατομική συνεδρία κοστίζει από 30€. Υπάρχουν ειδικές τιμές για φοιτητές και πολύτεκνες οικογένειες.</p></div>
@@ -198,7 +231,7 @@
 </section>
 
 <!-- Place -->
-<section class="place" id="place" aria-labelledby="h-place">
+<section class="place" id="place" data-ground="blue" aria-labelledby="h-place">
   <figure class="fade reveal" aria-roledescription="slideshow">
     <div class="fade-stack">
       <img class="on" src="assets/plate-koules.jpg" width="1440" height="1078" loading="lazy" alt="Το ενετικό φρούριο Κούλες και τα καΐκια στο λιμάνι του Ηρακλείου" data-cap="Το Κούλες, στο παλιό λιμάνι." data-cap-en="Koules, the Venetian fortress in the old harbour.">
@@ -222,7 +255,7 @@
 </section>
 
 <!-- Book: the coupon -->
-<section class="book" id="book" aria-labelledby="h-book">
+<section class="book" id="book" data-ground="paper" aria-labelledby="h-book">
   <form class="coupon reveal" id="coupon" data-tone="green" novalidate>
     <div class="coupon-l">
       <h2 id="h-book" lang="el" data-i18n="bookH">Κλείστε ραντεβού</h2>
@@ -265,14 +298,14 @@
       </fieldset>
       <label class="consent"><input type="checkbox" name="consent" required><span data-i18n="consent">Αποδέχομαι την <a href="https://inner-balance.gr/%CE%A0%CE%BF%CE%BB%CE%B9%CF%84%CE%B9%CE%BA%CE%AE-%CE%91%CF%80%CE%BF%CF%81%CF%81%CE%AE%CF%84%CE%BF%CF%85">Πολιτική Απορρήτου</a>.</span></label>
       <p class="form-error" id="form-error" role="alert" hidden></p>
-      <button class="submit" type="submit" data-i18n="submit">Ετοιμάστε το email</button>
+      <button class="submit btn-arrow" type="submit" data-i18n="submit">Ετοιμάστε το email</button>
     </div>
   </form>
 </section>
 
 </main>
 
-<footer class="foot">
+<footer class="foot" data-ground="ink">
   <div class="foot-cols">
     <div><p class="ft" data-i18n="fAddr">Γραφείο</p><p data-i18n="fAddrV">Μεγάλου Αλεξάνδρου 154<br>71305 Ηράκλειο Κρήτης</p></div>
     <div><p class="ft" data-i18n="fContact">Επικοινωνία</p><p><a href="tel:+302814029611">2814 029611</a><br><a href="tel:+306941535883">6941 535883</a><br><a href="mailto:paximadakis.antonios@gmail.com">paximadakis.antonios@gmail.com</a></p></div>
