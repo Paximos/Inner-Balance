@@ -503,3 +503,63 @@ h3 { font-size: var(--t-state); line-height: 1.08; letter-spacing: -0.02em; }
   .cover-wipe { display: none; }
   .btn-arrow::after { transition: none; }
 }
+/* =====================================================================
+   Readability pass (requested): calmer name, quieter About, drawn step
+   icons, a FAQ where questions and answers separate at a glance
+   ===================================================================== */
+
+/* The name: smaller, lighter, less compressed */
+.cover h1 { font-size: clamp(44px, 6.2vw, 100px); font-weight: 750; letter-spacing: -0.025em; line-height: 1; font-variation-settings: "FLAR" 40, "VOLM" 0; }
+
+/* About: body-sized reading text in full ink, generous leading */
+.about h2 { font-size: clamp(32px, 3.6vw, 56px); }
+.statement { font-size: clamp(18px, 1.45vw, 21px); line-height: 1.65; color: var(--ink); hyphens: manual; column-gap: clamp(32px, 4.5vw, 80px); }
+.statement b { font-weight: 700; }
+.statement .close { margin-top: 1em; }
+/* one comfortable column of reading text, the timeline beside it as a list */
+.about { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: clamp(16px, 2vw, 32px); align-items: start; }
+.about h2 { grid-column: 1 / -1; }
+.statement { grid-column: 1 / 8; column-count: 1; max-width: 62ch; }
+.timeline { grid-column: 9 / 13; grid-template-columns: 1fr; margin-top: 0; }
+.timeline > div:nth-child(n) { background: transparent; padding: 20px 24px; }
+.timeline > div:nth-child(odd) { background: var(--paper-2); }
+@media (max-width: 860px) {
+  .statement, .timeline { grid-column: 1 / -1; }
+  .timeline { margin-top: 56px; }
+}
+
+/* How we begin: one drawn icon per step, in the section's own ink */
+.how-steps { margin-top: 72px; row-gap: 48px; }
+.step-icon { display: block; width: clamp(72px, 7vw, 104px); height: auto; margin-bottom: 28px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.step-icon .dot { fill: currentColor; stroke: none; }
+.js .how-steps .step-icon path { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.4s var(--ease-glide) calc(var(--d, 0ms) + 200ms); }
+.js .how-steps .step-icon path:nth-of-type(2) { transition-delay: calc(var(--d, 0ms) + 420ms); }
+.js .how-steps .step-icon path:nth-of-type(3) { transition-delay: calc(var(--d, 0ms) + 640ms); }
+.js .how-steps .step-icon .dot { opacity: 0; transition: opacity 300ms ease calc(var(--d, 0ms) + 800ms); }
+.js .how-steps .step-icon .dot:nth-of-type(2) { transition-delay: calc(var(--d, 0ms) + 880ms); }
+.js .how-steps .step-icon .dot:nth-of-type(3) { transition-delay: calc(var(--d, 0ms) + 960ms); }
+.js .how-steps li.in .step-icon path { stroke-dashoffset: 0; }
+.js .how-steps li.in .step-icon .dot { opacity: 1; }
+
+/* FAQ: the red cover keeps the title; questions and answers sit on paper */
+.faq { background: var(--paper); color: var(--ink); padding-bottom: 0; }
+.faq .band-head { background: var(--red); color: var(--on-dark); }
+.faq .band:not(.band-head) { padding: 44px var(--m); align-items: start; }
+.faq .band:not(.band-head):nth-child(even) { background: var(--paper); }
+.faq .band:not(.band-head):nth-child(odd) { background: var(--paper-2); }
+.faq .band h3 { color: var(--red); font-size: clamp(22px, 1.9vw, 28px); line-height: 1.22; letter-spacing: -0.015em; }
+.faq .band p { color: var(--ink); font-size: 18px; line-height: 1.65; }
+
+@media (max-width: 560px) {
+  .cover h1 { font-size: 11.6vw; }
+  .statement { font-size: 18px; line-height: 1.65; }
+  .how-steps { margin-top: 48px; }
+  .step-icon { width: 72px; margin-bottom: 18px; }
+  .faq .band:not(.band-head) { padding: 32px var(--m); }
+  .faq .band p { font-size: 17px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .how-steps .step-icon path { stroke-dashoffset: 0; transition: none; }
+  .js .how-steps .step-icon .dot { opacity: 1; transition: none; }
+}

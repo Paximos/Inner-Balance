@@ -308,44 +308,6 @@
   }
   setInterval(updateOpen, 60000);
 
-  /* ---------- Many into one: the diagram ---------- */
-  function rng(seed) { return () => (seed = (seed * 16807) % 2147483647) / 2147483647; }
-  const NS = 'http://www.w3.org/2000/svg';
-  function sq(svg, x, y, s, fill, op, delay, from) {
-    const r = document.createElementNS(NS, 'rect');
-    r.setAttribute('x', x.toFixed(1)); r.setAttribute('y', y.toFixed(1));
-    r.setAttribute('width', s); r.setAttribute('height', s);
-    r.setAttribute('fill', fill); r.setAttribute('opacity', op);
-    r.style.transitionDelay = `${delay}ms`;
-    r.dataset.from = from;
-    svg.appendChild(r);
-  }
-  function drawH(svg) {
-    const R = rng(7); const s = 12;
-    for (let i = 0; i < 46; i++) sq(svg, 10 + R() * 360, 14 + R() * 230, s, '#F1F1EF', i % 2 ? 0.35 : 0.7, i * 10, `${(R() - .5) * 120}px,${(R() - .5) * 120}px`);
-    for (let c = 0; c < 20; c++) for (let rI = 0; rI < 3; rI++) sq(svg, 420 + c * 18, 112 + rI * 16, s, '#F1F1EF', 0.9, 300 + c * 12, `${(R() - .5) * 160 - 120}px,${(R() - .5) * 200}px`);
-    for (let rI = 0; rI < 5; rI++) for (let c = 0; c < 9; c++) sq(svg, 828 + c * 41, 34 + rI * 46, s + 6, '#F1F1EF', 1, 560 + (rI * 9 + c) * 8, `${(R() - .5) * 120 - 200}px,${(R() - .5) * 160}px`);
-  }
-  function drawV(svg) {
-    const R = rng(11); const s = 10;
-    for (let i = 0; i < 34; i++) sq(svg, 14 + R() * 270, 6 + R() * 110, s, '#F1F1EF', i % 2 ? 0.35 : 0.7, i * 10, `${(R() - .5) * 80}px,${(R() - .5) * 80}px`);
-    for (let rI = 0; rI < 9; rI++) for (let c = 0; c < 3; c++) sq(svg, 130 + c * 14, 140 + rI * 14, s, '#F1F1EF', 0.9, 260 + rI * 18, `${(R() - .5) * 120}px,${(R() - .5) * 60 - 80}px`);
-    for (let rI = 0; rI < 4; rI++) for (let c = 0; c < 7; c++) sq(svg, 26 + c * 40, 290 + rI * 28, s + 4, '#F1F1EF', 1, 440 + (rI * 7 + c) * 10, `${(R() - .5) * 100}px,${-90 - R() * 60}px`);
-  }
-  const dgH = $('.dg-h'), dgV = $('.dg-v');
-  if (dgH) drawH(dgH);
-  if (dgV) drawV(dgV);
-  const diagram = $('.how-diagram');
-  if (diagram && !reduce && 'IntersectionObserver' in window) {
-    $$('rect', diagram).forEach(r => { r.style.transform = `translate(${r.dataset.from})`; r.style.opacity = '0'; });
-    const dio = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) {
-        requestAnimationFrame(() => $$('rect', diagram).forEach(r => { r.style.transform = ''; r.style.opacity = ''; }));
-        dio.disconnect();
-      }
-    }, { threshold: 0.15 });
-    dio.observe(diagram);
-  }
 
   /* ---------- The coupon: compose the email ---------- */
   const err = $('#form-error');
