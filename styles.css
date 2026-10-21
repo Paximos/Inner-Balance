@@ -109,7 +109,7 @@ h3 { font-size: var(--t-state); line-height: 1.08; letter-spacing: -0.02em; }
 .cover-text { grid-column: 1 / 8; align-self: center; }
 .cover h1 { font-size: var(--t-display); letter-spacing: -0.045em; line-height: 0.9; font-weight: 850; }
 .cover h1 > span { display: block; }
-.lede { margin-top: 40px; max-width: 34ch; font-size: var(--t-state); line-height: 1.3; font-weight: 450; }
+.lede { margin-top: 40px; max-width: 34ch; font-size: var(--t-state); line-height: 1.35; font-weight: 450; }
 
 .picker { margin: 40px 0 0; padding: 0; border: 0; }
 .picker legend { padding: 0; font-weight: 700; margin-bottom: 14px; }
@@ -150,7 +150,7 @@ h3 { font-size: var(--t-state); line-height: 1.08; letter-spacing: -0.02em; }
 /* ---------- About ---------- */
 .about { padding: var(--gap) var(--m) 0; }
 .about h2 { margin-bottom: 48px; }
-.statement { columns: 2; column-gap: clamp(24px, 3vw, 48px); font-size: var(--t-state); line-height: 1.24; color: var(--ink-soft); hyphens: auto; }
+.statement { columns: 2; column-gap: clamp(24px, 3vw, 48px); font-size: var(--t-state); line-height: 1.35; color: var(--ink-soft); hyphens: auto; }
 .statement b { color: var(--ink); font-weight: 750; }
 .statement mark { color: var(--ink); padding: 0 0.12em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .statement mark.m-red { background: var(--red); color: var(--paper); }
@@ -213,7 +213,7 @@ h3 { font-size: var(--t-state); line-height: 1.08; letter-spacing: -0.02em; }
 .field { min-height: 80svh; padding: clamp(40px, 5vw, 72px) var(--m); display: flex; flex-direction: column; gap: 32px; }
 .f-main { background: var(--green); color: var(--on-dark); }
 .f-side { background: var(--paper-2); color: var(--ink); }
-.field-top p { margin-top: 20px; font-size: var(--t-state); max-width: 26ch; line-height: 1.3; }
+.field-top p { margin-top: 20px; font-size: var(--t-state); max-width: 26ch; line-height: 1.35; }
 .f-side h3 { font-size: var(--t-head); line-height: 0.98; letter-spacing: -0.03em; }
 .incl { max-width: 46ch; color: var(--on-dark-soft); }
 .field-foot { margin-top: auto; display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
@@ -359,7 +359,7 @@ h3 { font-size: var(--t-state); line-height: 1.08; letter-spacing: -0.02em; }
   .picker { margin-top: 32px; }
   .chips span { padding: 0 14px; }
   .cover-actions .btn { width: 100%; }
-  .statement { columns: 1; hyphens: manual; line-height: 1.3; }
+  .statement { columns: 1; hyphens: manual; line-height: 1.4; }
   .timeline { grid-template-columns: 1fr; gap: 28px; margin-top: 56px; }
   .timeline > div:nth-child(n) { background: transparent; padding: 0; }
   .plate-img { aspect-ratio: 5 / 2; }
@@ -464,7 +464,7 @@ h3 { font-size: var(--t-state); line-height: 1.08; letter-spacing: -0.02em; }
 /* ---- At a glance: facts that fall and settle ---- */
 .glance { position: relative; overflow: clip; min-height: 88svh; padding: var(--gap) var(--m) 32px; display: flex; flex-direction: column; justify-content: space-between; }
 .glance-copy { position: relative; z-index: 2; max-width: 60ch; pointer-events: none; }
-.glance-lead { margin-top: 24px; font-size: var(--t-state); line-height: 1.3; }
+.glance-lead { margin-top: 24px; font-size: var(--t-state); line-height: 1.35; }
 .tags { position: relative; z-index: 1; display: flex; flex-wrap: wrap-reverse; justify-content: center; gap: 10px; margin-top: 64px; }
 .tag { display: inline-flex; align-items: center; min-height: 56px; padding: 0 22px; font-weight: 750; font-size: var(--t-state); letter-spacing: -0.01em; white-space: nowrap; color: var(--on-dark); user-select: none; }
 .tag.t-paper { background: var(--paper-2); color: var(--ink); }
