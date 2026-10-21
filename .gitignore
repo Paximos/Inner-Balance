@@ -5,3 +5,5 @@
 .impeccable/live/
 .impeccable/config.local.json
 .impeccable/hook.cache.json
+dist/
+.netlify/
